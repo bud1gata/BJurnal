@@ -20,6 +20,30 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+// Function to normalize MongoDB _id to id recursively
+const normalizeDbResp = (data) => {
+  if (Array.isArray(data)) {
+    return data.map(item => normalizeDbResp(item));
+  } else if (data !== null && typeof data === 'object') {
+    const newData = { ...data };
+    if (newData._id) {
+      newData.id = newData._id.toString();
+    }
+    for (const key in newData) {
+      if (typeof newData[key] === 'object') {
+        newData[key] = normalizeDbResp(newData[key]);
+      }
+    }
+    return newData;
+  }
+  return data;
+}
+
+api.interceptors.response.use((response) => {
+  response.data = normalizeDbResp(response.data);
+  return response;
+});
+
 // ====== Auth API ======
 export const authApi = {
   async register(userData) {
@@ -83,6 +107,13 @@ export const noteApi = {
   },
   async createNote(data) {
     const response = await api.post('/notes', data);
+    return response.data;
+  },
+  async getNoteBySessionAndStudent(sessionId) {
+    // We can use createNote here because the backend handles find-or-create logic
+    // or we could add a specific search endpoint. For now, createNote is sufficient
+    // as it returns the existing note if found.
+    const response = await api.post('/notes', { sessionId });
     return response.data;
   },
   async updateNote(noteId, data) {

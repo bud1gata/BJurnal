@@ -87,15 +87,7 @@ export default function Session() {
         const sessionData = await sessionApi.getSession(sessionId)
         setSession(sessionData)
 
-        let noteData = await noteApi.getNoteBySessionAndStudent(sessionId, user.id)
-        if (!noteData && sessionData) {
-          noteData = await noteApi.createNote({
-            sessionId,
-            studentId: user.id,
-            studentName: user.nama,
-            title: sessionData.title,
-          })
-        }
+        const noteData = await noteApi.getNoteBySessionAndStudent(sessionId)
         if (noteData) {
           setNote(noteData)
           setReflection(noteData.reflection || '')
