@@ -164,9 +164,38 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+// @desc    Change user password
+// @route   PUT /api/auth/change-password
+// @access  Private
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Password saat ini dan password baru wajib diisi' });
+    }
+
+    const user = await User.findById(req.user._id).select('+password');
+
+    if (user && (await user.matchPassword(currentPassword))) {
+      if (currentPassword === newPassword) {
+        return res.status(400).json({ message: 'Password baru tidak boleh sama dengan password saat ini' });
+      }
+      user.password = newPassword;
+      await user.save();
+      res.json({ message: 'Password berhasil diperbarui' });
+    } else {
+      res.status(401).json({ message: 'Password saat ini salah' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  changePassword
 };

@@ -61,6 +61,10 @@ export const authApi = {
   async updateProfile(userData) {
     const response = await api.put('/auth/profile', userData);
     return response.data;
+  },
+  async changePassword(passwords) {
+    const response = await api.put('/auth/change-password', passwords);
+    return response.data;
   }
 };
 
