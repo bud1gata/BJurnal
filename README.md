@@ -2,6 +2,8 @@
 
 BJurnal adalah aplikasi jurnal pembelajaran digital yang dirancang untuk membantu murid mencatat materi pelajaran secara cerdas dan memungkinkan guru untuk memantau perkembangan belajar murid secara real-time.
 
+Jika terdapat pertanyaan atau kendala, silahkan hubungi saya melalui email: [me@budiputra.web.id]
+
 ## 🚀 Fitur Utama
 
 ### 🎓 Untuk Murid
