@@ -8,13 +8,13 @@ BJurnal adalah aplikasi jurnal pembelajaran digital yang dirancang untuk membant
 - **Smart Note Editor**: Editor teks kaya (Rich Text) dengan fitur auto-save setiap 60 detik.
 - **Refleksi Pembelajaran**: Bagian khusus untuk mencatat pemikiran dan pemahaman murid terhadap materi.
 - **Arsip Catatan**: Riwayat lengkap seluruh catatan yang pernah dibuat selama masa sekolah.
-- **Kelas Dinamis**: Pengajuan perpindahan kelas yang terintegrasi dengan persetujuan guru.
+- **Kelas Dinamis (still on progress)**: Pengajuan perpindahan kelas yang terintegrasi dengan persetujuan guru.
 
 ### 📚 Untuk Guru
 - **Session Manager**: Membuat dan mengelola sesi pembelajaran aktif dengan durasi tertentu.
 - **Submission Tracker**: Memantau status pengerjaan murid (Belum Masuk, Draft, Terkirim) secara instan.
 - **Review Panel**: Membaca dan meninjau catatan serta refleksi murid setelah sesi berakhir.
-- **Persetujuan Kelas**: Memvalidasi permintaan pindah kelas dari murid.
+- **Persetujuan Kelas (still on progress)**: Memvalidasi permintaan pindah kelas dari murid.
 
 ### 🔑 Untuk Admin
 - **Manajemen Akun**: Vetting dan persetujuan akun baru (Guru/Murid) untuk menjaga keamanan sistem.
