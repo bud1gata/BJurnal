@@ -37,10 +37,7 @@ export default function Register() {
     e.preventDefault()
     if (!validate()) return
 
-    setLoading(true)
-    await new Promise(r => setTimeout(r, 500))
-
-    const result = register(form)
+    const result = await register(form)
     setLoading(false)
 
     if (result.success) {

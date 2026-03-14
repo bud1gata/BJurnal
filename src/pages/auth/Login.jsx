@@ -27,10 +27,7 @@ export default function Login() {
     if (!validate()) return
 
     setLoading(true)
-    // Simulate network delay
-    await new Promise(r => setTimeout(r, 500))
-
-    const result = login(form.nomorInduk, form.password)
+    const result = await login(form.nomorInduk, form.password)
     setLoading(false)
 
     if (result.success) {

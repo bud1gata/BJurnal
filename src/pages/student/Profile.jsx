@@ -33,10 +33,12 @@ export default function Profile() {
     if (user?.role === ROLES.STUDENT) loadStats()
   }, [user])
 
-  const handleSave = () => {
-    updateProfile(form)
-    setEditing(false)
-    toast.success('Profil diperbarui')
+  const handleSave = async () => {
+    const result = await updateProfile(form)
+    if (result.success) {
+      setEditing(false)
+      toast.success('Profil diperbarui')
+    }
   }
 
   const handleLogout = () => {

@@ -1,90 +1,93 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-import { ROLES } from '../utils/constants'
+import { createContext, useContext, useState, useEffect } from 'react';
+import { ROLES } from '../utils/constants';
+import { authApi } from '../services/api';
+import toast from 'react-hot-toast';
 
-const AuthContext = createContext(null)
-
-// Mock users for demo
-const MOCK_USERS = [
-  { id: '1', nomorInduk: '2024001', password: 'murid123', nama: 'Ahmad Rizky', kelas: 'X-IPA-1', role: ROLES.STUDENT },
-  { id: '2', nomorInduk: '2024002', password: 'murid123', nama: 'Siti Nurhaliza', kelas: 'X-IPA-1', role: ROLES.STUDENT },
-  { id: '3', nomorInduk: '2024003', password: 'murid123', nama: 'Budi Santoso', kelas: 'X-IPA-2', role: ROLES.STUDENT },
-  { id: '4', nomorInduk: '2024004', password: 'murid123', nama: 'Dewi Anggraini', kelas: 'X-IPS-1', role: ROLES.STUDENT },
-  { id: '5', nomorInduk: '2024005', password: 'murid123', nama: 'Fajar Nugroho', kelas: 'X-IPA-1', role: ROLES.STUDENT },
-  { id: 'T1', nomorInduk: '1980001', password: 'guru123', nama: 'Pak Hendra Wijaya', kelas: null, role: ROLES.TEACHER },
-  { id: 'T2', nomorInduk: '1980002', password: 'guru123', nama: 'Bu Ratna Sari', kelas: null, role: ROLES.TEACHER },
-]
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // Verifikasi token saat app muat
   useEffect(() => {
-    const stored = localStorage.getItem('bjurnal_user')
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored))
-      } catch {
-        localStorage.removeItem('bjurnal_user')
+    const initAuth = async () => {
+      const token = localStorage.getItem('bjurnal_token');
+      if (token) {
+        try {
+          const profile = await authApi.getProfile();
+          setUser(profile);
+        } catch (error) {
+          console.error('Failed to authenticate token:', error);
+          localStorage.removeItem('bjurnal_token');
+          setUser(null);
+        }
       }
-    }
-    setLoading(false)
-  }, [])
+      setLoading(false);
+    };
 
-  const login = (nomorInduk, password) => {
-    const found = MOCK_USERS.find(
-      u => u.nomorInduk === nomorInduk && u.password === password
-    )
-    if (!found) {
-      return { success: false, message: 'Nomor induk atau password salah' }
-    }
-    const userData = { id: found.id, nomorInduk: found.nomorInduk, nama: found.nama, kelas: found.kelas, role: found.role }
-    setUser(userData)
-    localStorage.setItem('bjurnal_user', JSON.stringify(userData))
-    return { success: true, user: userData }
-  }
+    initAuth();
+  }, []);
 
-  const register = ({ nomorInduk, password, nama, kelas, role }) => {
-    const exists = MOCK_USERS.find(u => u.nomorInduk === nomorInduk)
-    if (exists) {
-      return { success: false, message: 'Nomor induk sudah terdaftar' }
+  const login = async (nomorInduk, password) => {
+    try {
+      const data = await authApi.login({ nomorInduk, password });
+      setUser(data);
+      localStorage.setItem('bjurnal_token', data.token);
+      return { success: true, user: data };
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.response?.data?.message || 'Gagal login. Periksa kembali koneksi Anda.' 
+      };
     }
-    const newUser = {
-      id: `U${Date.now()}`,
-      nomorInduk,
-      password,
-      nama,
-      kelas: role === ROLES.TEACHER ? null : kelas,
-      role,
+  };
+
+  const register = async (userData) => {
+    try {
+      const data = await authApi.register(userData);
+      setUser(data);
+      localStorage.setItem('bjurnal_token', data.token);
+      return { success: true, user: data };
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.response?.data?.message || 'Gagal registrasi.' 
+      };
     }
-    MOCK_USERS.push(newUser)
-    const userData = { id: newUser.id, nomorInduk: newUser.nomorInduk, nama: newUser.nama, kelas: newUser.kelas, role: newUser.role }
-    setUser(userData)
-    localStorage.setItem('bjurnal_user', JSON.stringify(userData))
-    return { success: true, user: userData }
-  }
+  };
 
   const logout = () => {
-    setUser(null)
-    localStorage.removeItem('bjurnal_user')
-  }
+    setUser(null);
+    localStorage.removeItem('bjurnal_token');
+  };
 
-  const updateProfile = (updates) => {
-    const updated = { ...user, ...updates }
-    setUser(updated)
-    localStorage.setItem('bjurnal_user', JSON.stringify(updated))
-  }
+  const updateProfile = async (updates) => {
+    try {
+      const result = await authApi.updateProfile(updates);
+      setUser(result);
+      if (result.token) {
+        localStorage.setItem('bjurnal_token', result.token);
+      }
+      return { success: true };
+    } catch (error) {
+      const msg = error.response?.data?.message || 'Gagal memperbarui profil';
+      toast.error(msg);
+      return { success: false, message: msg };
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ user, loading, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error('useAuth must be used within an AuthProvider');
   }
-  return context
+  return context;
 }
