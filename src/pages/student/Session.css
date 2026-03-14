@@ -1,0 +1,285 @@
+/* Session / Note Editor */
+.editor-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.editor-title-area {
+  flex: 1;
+  min-width: 200px;
+}
+
+.editor-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+}
+
+.editor-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  margin-top: var(--space-1);
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.save-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+}
+
+.save-indicator.saving {
+  color: var(--warning);
+}
+
+.save-indicator.saved {
+  color: var(--success);
+}
+
+.save-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.save-dot.saving {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* TipTap Editor */
+.editor-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+  flex-wrap: wrap;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.toolbar-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.toolbar-btn.is-active {
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  margin: 0 var(--space-2);
+}
+
+.editor-content {
+  padding: var(--space-6);
+  min-height: 300px;
+  font-size: var(--fs-base);
+  line-height: 1.8;
+}
+
+/* TipTap ProseMirror styles */
+.editor-content .ProseMirror {
+  outline: none;
+  min-height: 280px;
+}
+
+.editor-content .ProseMirror > *:first-child {
+  margin-top: 0;
+}
+
+.editor-content .ProseMirror h1 {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  margin: var(--space-6) 0 var(--space-3);
+}
+
+.editor-content .ProseMirror h2 {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  margin: var(--space-5) 0 var(--space-2);
+}
+
+.editor-content .ProseMirror h3 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.editor-content .ProseMirror p {
+  margin-bottom: var(--space-3);
+}
+
+.editor-content .ProseMirror ul,
+.editor-content .ProseMirror ol {
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-6);
+}
+
+.editor-content .ProseMirror li {
+  margin-bottom: var(--space-1);
+}
+
+.editor-content .ProseMirror strong {
+  font-weight: var(--fw-bold);
+}
+
+.editor-content .ProseMirror em {
+  font-style: italic;
+}
+
+.editor-content .ProseMirror u {
+  text-decoration: underline;
+}
+
+.editor-content .ProseMirror s {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.editor-content .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--space-4) 0;
+}
+
+.editor-content .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Reflection Box */
+.reflection-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.reflection-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  color: var(--accent);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+}
+
+.reflection-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--space-4);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.reflection-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.reflection-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.reflection-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Submit Bar */
+.submit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.submit-bar-info {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .editor-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .editor-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .editor-toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .submit-bar {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
