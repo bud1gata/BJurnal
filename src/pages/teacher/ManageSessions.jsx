@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Clock, BookOpen, Eye, XCircle, Users } from 'lucide-react'
+import { Plus, Clock, BookOpen, Eye, XCircle } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { sessionApi } from '../../services/api'
 import { useCountdown } from '../../hooks/useHooks'
@@ -8,16 +8,16 @@ import { Input, Select } from '../../components/ui/Input'
 import Button from '../../components/ui/Button'
 import { Badge, Modal, Loader, EmptyState } from '../../components/ui/Components'
 import { DURATIONS, KELAS_OPTIONS, SESSION_STATUS } from '../../utils/constants'
-import { getGreeting, formatDate } from '../../utils/helpers'
+import { formatDate } from '../../utils/helpers'
 import toast from 'react-hot-toast'
 import './Teacher.css'
 
 function SessionTimer({ endTime }) {
-  const { formatted, secondsLeft } = useCountdown(endTime)
+  const { formatted } = useCountdown(endTime)
   return <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatted}</span>
 }
 
-export default function TeacherDashboard() {
+export default function ManageSessions() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [sessions, setSessions] = useState([])
@@ -29,11 +29,11 @@ export default function TeacherDashboard() {
 
   useEffect(() => {
     loadSessions()
-  }, [user])
+  }, [])
 
   async function loadSessions() {
     try {
-      const data = await sessionApi.getSessionsByTeacher(user.id)
+      const data = await sessionApi.getSessionsByTeacher()
       setSessions(data)
     } catch (err) {
       console.error(err)
@@ -52,8 +52,6 @@ export default function TeacherDashboard() {
     try {
       await sessionApi.createSession({
         title: form.title,
-        teacherId: user.id,
-        teacherName: user.nama,
         kelas: form.kelas,
         duration: form.duration,
       })
@@ -90,8 +88,8 @@ export default function TeacherDashboard() {
   return (
     <div className="animate-fade-in">
       <div className="page-header">
-        <h1 className="page-greeting">{getGreeting()}, {user.nama?.split(' ').pop()}! 📚</h1>
-        <p className="page-subtitle">Kelola sesi pelajaran Anda</p>
+        <h1 className="page-greeting">Kelola Sesi 📋</h1>
+        <p className="page-subtitle">Mulai dan atur sesi pelajaran aktif Anda</p>
       </div>
 
       <div className="teacher-grid">
@@ -163,7 +161,7 @@ export default function TeacherDashboard() {
               <h3 style={{ marginTop: '24px', marginBottom: '12px', color: 'var(--text-secondary)', fontSize: 'var(--fs-sm)' }}>
                 Riwayat Sesi
               </h3>
-              {pastSessions.slice(0, 5).map(session => (
+              {pastSessions.slice(0, 10).map(session => (
                 <div key={session.id} className="session-list-item">
                   <div className="session-list-info">
                     <div className="session-list-title">{session.title}</div>

@@ -13,7 +13,8 @@ import NoteView from './pages/student/NoteView'
 import Profile from './pages/student/Profile'
 
 // Teacher Pages
-import TeacherDashboard from './pages/teacher/TeacherDashboard'
+import TeacherHome from './pages/teacher/TeacherHome'
+import ManageSessions from './pages/teacher/ManageSessions'
 import SessionDetail from './pages/teacher/SessionDetail'
 import ReviewNote from './pages/teacher/ReviewNote'
 
@@ -38,8 +39,8 @@ export default function App() {
 
         {/* Teacher routes */}
         <Route element={<TeacherGuard />}>
-          <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-          <Route path="/teacher/sessions" element={<TeacherDashboard />} />
+          <Route path="/teacher/dashboard" element={<TeacherHome />} />
+          <Route path="/teacher/sessions" element={<ManageSessions />} />
           <Route path="/teacher/session/:sessionId" element={<SessionDetail />} />
           <Route path="/teacher/review/:noteId" element={<ReviewNote />} />
         </Route>

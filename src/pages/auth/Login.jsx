@@ -74,12 +74,6 @@ export default function Login() {
       <div className="auth-footer">
         Belum punya akun? <Link to="/register">Daftar di sini</Link>
       </div>
-
-      <div style={{ marginTop: '24px', padding: '16px', background: 'var(--bg-primary)', borderRadius: '8px', fontSize: '12px', color: 'var(--text-muted)' }}>
-        <strong style={{ color: 'var(--text-secondary)' }}>Demo Login:</strong><br />
-        Murid: 2024001 / murid123<br />
-        Guru: 1980001 / guru123
-      </div>
     </div>
   )
 }

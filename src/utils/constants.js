@@ -28,10 +28,7 @@ export const DURATIONS = [
 ]
 
 export const KELAS_OPTIONS = [
-  'VII-A', 'VII-B', 'VII-C',
-  'VIII-A', 'VIII-B', 'VIII-C',
-  'IX-A', 'IX-B', 'IX-C',
-  'X-IPA-1', 'X-IPA-2', 'X-IPS-1', 'X-IPS-2',
-  'XI-IPA-1', 'XI-IPA-2', 'XI-IPS-1', 'XI-IPS-2',
-  'XII-IPA-1', 'XII-IPA-2', 'XII-IPS-1', 'XII-IPS-2',
+  'X TKJ', 'X AK', 'X TB',
+  'XI TKJ', 'XI AK', 'XI TB',
+  'XII TKJ', 'XII AK', 'XII TB',
 ]
