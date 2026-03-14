@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/sessions', require('./routes/sessionRoutes'));
 app.use('/api/notes', require('./routes/noteRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Basic Route for testing
 app.get('/', (req, res) => {
@@ -24,6 +25,6 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });

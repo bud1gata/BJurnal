@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { AuthLayout, MainLayout, StudentGuard, TeacherGuard } from './layouts/Layout'
+import { AuthLayout, MainLayout, StudentGuard, TeacherGuard, AdminGuard } from './layouts/Layout'
 
 // Auth Pages
 import Login from './pages/auth/Login'
@@ -17,6 +17,10 @@ import TeacherHome from './pages/teacher/TeacherHome'
 import ManageSessions from './pages/teacher/ManageSessions'
 import SessionDetail from './pages/teacher/SessionDetail'
 import ReviewNote from './pages/teacher/ReviewNote'
+import Approvals from './pages/teacher/Approvals'
+
+// Admin Pages
+import AccountApprovals from './pages/admin/AccountApprovals'
 
 export default function App() {
   return (
@@ -43,6 +47,12 @@ export default function App() {
           <Route path="/teacher/sessions" element={<ManageSessions />} />
           <Route path="/teacher/session/:sessionId" element={<SessionDetail />} />
           <Route path="/teacher/review/:noteId" element={<ReviewNote />} />
+          <Route path="/teacher/approvals" element={<Approvals />} />
+        </Route>
+
+        {/* Admin routes */}
+        <Route element={<AdminGuard />}>
+          <Route path="/admin/accounts" element={<AccountApprovals />} />
         </Route>
 
         {/* Shared routes */}

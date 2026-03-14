@@ -85,13 +85,41 @@ export default function Profile() {
                 <span className="profile-info-value">{user?.kelas}</span>
               </div>
             )}
+            {user?.isPendingApproval && (
+              <div className="pending-badge" style={{ 
+                marginTop: '12px', 
+                padding: '12px', 
+                background: 'rgba(245, 158, 11, 0.1)', 
+                border: '1px solid var(--warning)',
+                borderRadius: '8px',
+                fontSize: 'var(--fs-xs)',
+                color: 'var(--warning)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <span style={{ fontSize: '16px' }}>⏳</span>
+                Pengajuan pindah ke kelas <strong>{user.requestedKelas}</strong> sedang menunggu persetujuan admin.
+              </div>
+            )}
             <div className="profile-info-row">
               <span className="profile-info-label">Role</span>
               <span className="profile-info-value" style={{ textTransform: 'capitalize' }}>{user?.role}</span>
             </div>
-            <Button variant="secondary" size="sm" onClick={() => setEditing(true)} style={{ marginTop: '16px' }}>
-              Edit Profil
-            </Button>
+            {user?.role !== ROLES.STUDENT && (
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                onClick={() => {
+                  setForm({ nama: user?.nama || '', kelas: user?.kelas || '' })
+                  setEditing(true)
+                }} 
+                style={{ marginTop: '16px' }}
+                disabled={user?.isPendingApproval}
+              >
+                {user?.isPendingApproval ? 'Menunggu Persetujuan' : 'Edit Profil'}
+              </Button>
+            )}
           </>
         ) : (
           <div className="profile-form">

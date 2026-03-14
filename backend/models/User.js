@@ -21,21 +21,33 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['murid', 'guru'],
+    enum: ['murid', 'guru', 'admin'],
     required: true
   },
   kelas: {
     type: String,
     required: function() { return this.role === 'murid'; }
+  },
+  requestedKelas: {
+    type: String,
+    default: null
+  },
+  isPendingApproval: {
+    type: Boolean,
+    default: false
+  },
+  isApproved: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true
 });
 
 // Enkripsi password sebelum save
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
   if (!this.isModified('password')) {
-    next();
+    return;
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

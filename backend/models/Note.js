@@ -39,4 +39,7 @@ const noteSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Ensure a student can only have one note per session
+noteSchema.index({ sessionId: 1, studentId: 1 }, { unique: true });
+
 module.exports = mongoose.model('Note', noteSchema);

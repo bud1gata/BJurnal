@@ -118,25 +118,40 @@ const getSessionTracker = async (req, res) => {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
-    // Ambil semua murid di kelas tersebut
-    const students = await User.find({ role: 'murid', kelas: session.kelas })
+    // Ambil semua murid di kelas tersebut saat ini
+    const studentsInClass = await User.find({ role: 'murid', kelas: session.kelas })
       .select('_id nama');
 
     // Ambil semua notes untuk sesi ini
     const notes = await Note.find({ sessionId: session._id });
 
-    // Gabungkan data
-    const tracker = students.map(student => {
-      const studentNote = notes.find(n => n.studentId.toString() === student._id.toString());
-      
-      return {
+    // Gunakan Map untuk menggabungkan data agar lebih efisien dan menangani murid yang pindah kelas
+    const trackerMap = new Map();
+
+    // Pertama, masukkan semua murid yang seharusnya ada di kelas ini
+    studentsInClass.forEach(student => {
+      trackerMap.set(student._id.toString(), {
         studentId: student._id,
         studentName: student.nama,
-        noteId: studentNote ? studentNote._id : null,
-        status: studentNote ? studentNote.status : 'belum_masuk',
-        submittedAt: studentNote ? studentNote.submittedAt : null
-      };
+        noteId: null,
+        status: 'belum_masuk',
+        submittedAt: null
+      });
     });
+
+    // Kedua, masukkan/update data berdasarkan catatan yang ada
+    // Ini menangani murid yang mungkin sudah pindah kelas tapi punya catatan di sini
+    notes.forEach(note => {
+      trackerMap.set(note.studentId.toString(), {
+        studentId: note.studentId,
+        studentName: note.studentName, // Gunakan nama saat catatan dibuat/diupdate
+        noteId: note._id,
+        status: note.status,
+        submittedAt: note.submittedAt
+      });
+    });
+
+    const tracker = Array.from(trackerMap.values());
 
     res.json(tracker);
   } catch (error) {

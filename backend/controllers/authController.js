@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
       userData.kelas = kelas;
     }
 
-    const user = await User.create(userData);
+    const user = await User.create({ ...userData, isApproved: false });
 
     if (user) {
       res.status(201).json({
@@ -44,7 +44,10 @@ const registerUser = async (req, res) => {
         nomorInduk: user.nomorInduk,
         role: user.role,
         kelas: user.kelas,
-        token: generateToken(user._id)
+        requestedKelas: user.requestedKelas,
+        isPendingApproval: user.isPendingApproval,
+        isApproved: user.isApproved,
+        message: 'Registrasi berhasil. Akun Anda sedang menunggu persetujuan admin.'
       });
     } else {
       res.status(400).json({ message: 'Data user tidak valid' });
@@ -65,12 +68,19 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ nomorInduk }).select('+password');
 
     if (user && (await user.matchPassword(password))) {
+      if (!user.isApproved) {
+        return res.status(403).json({ message: 'Akun Anda belum disetujui oleh admin. Silakan hubungi admin.' });
+      }
+
       res.json({
         _id: user.id,
         nama: user.nama,
         nomorInduk: user.nomorInduk,
         role: user.role,
         kelas: user.kelas,
+        requestedKelas: user.requestedKelas,
+        isPendingApproval: user.isPendingApproval,
+        isApproved: user.isApproved,
         token: generateToken(user._id)
       });
     } else {
@@ -94,7 +104,10 @@ const getUserProfile = async (req, res) => {
         nama: user.nama,
         nomorInduk: user.nomorInduk,
         role: user.role,
-        kelas: user.kelas
+        kelas: user.kelas,
+        requestedKelas: user.requestedKelas,
+        isPendingApproval: user.isPendingApproval,
+        isApproved: user.isApproved
       });
     } else {
       res.status(404).json({ message: 'User tidak ditemukan' });
@@ -112,10 +125,18 @@ const updateUserProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
+      if (user.role === 'murid') {
+        return res.status(403).json({ message: 'Murid tidak diperbolehkan mengedit profil sendiri' });
+      }
       user.nama = req.body.nama || user.nama;
       
       if (user.role === 'murid' && req.body.kelas) {
-        user.kelas = req.body.kelas;
+        // Jika kelas berubah, buat request persetujuan
+        if (req.body.kelas !== user.kelas) {
+          user.requestedKelas = req.body.kelas;
+          user.isPendingApproval = true;
+          // Jangan update user.kelas sekarang
+        }
       }
 
       if (req.body.password) {
@@ -130,6 +151,9 @@ const updateUserProfile = async (req, res) => {
         nomorInduk: updatedUser.nomorInduk,
         role: updatedUser.role,
         kelas: updatedUser.kelas,
+        requestedKelas: updatedUser.requestedKelas,
+        isPendingApproval: updatedUser.isPendingApproval,
+        isApproved: updatedUser.isApproved,
         token: generateToken(updatedUser._id)
       });
     } else {

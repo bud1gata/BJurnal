@@ -46,6 +46,15 @@ export function AuthProvider({ children }) {
   const register = async (userData) => {
     try {
       const data = await authApi.register(userData);
+      
+      if (data.isApproved === false) {
+        return { 
+          success: true, 
+          user: data, 
+          message: data.message || 'Registrasi berhasil. Menunggu persetujuan admin.' 
+        };
+      }
+
       setUser(data);
       localStorage.setItem('bjurnal_token', data.token);
       return { success: true, user: data };

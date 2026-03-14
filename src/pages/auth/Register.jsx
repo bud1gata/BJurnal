@@ -41,8 +41,13 @@ export default function Register() {
     setLoading(false)
 
     if (result.success) {
-      toast.success('Akun berhasil dibuat!')
-      navigate(result.user.role === ROLES.TEACHER ? '/teacher/dashboard' : '/dashboard')
+      if (result.user.isApproved === false) {
+        toast.success(result.message || 'Registrasi berhasil! Akun Anda sedang menunggu persetujuan admin.', { duration: 5000 })
+        navigate('/login')
+      } else {
+        toast.success('Akun berhasil dibuat!')
+        navigate(result.user.role === ROLES.TEACHER ? '/teacher/dashboard' : '/dashboard')
+      }
     } else {
       toast.error(result.message)
     }

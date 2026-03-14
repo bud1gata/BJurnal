@@ -12,6 +12,7 @@ export function AuthLayout() {
 
   if (loading) return <Loader fullscreen />
   if (user) {
+    if (user.role === ROLES.ADMIN) return <Navigate to="/admin/accounts" replace />
     return <Navigate to={user.role === ROLES.TEACHER ? '/teacher/dashboard' : '/dashboard'} replace />
   }
 
@@ -54,7 +55,17 @@ export function StudentGuard() {
 // Teacher Only Layout Guard
 export function TeacherGuard() {
   const { user } = useAuth()
-  if (user?.role !== ROLES.TEACHER) {
+  // Admin can also access teacher tools
+  if (user?.role !== ROLES.TEACHER && user?.role !== ROLES.ADMIN) {
+    return <Navigate to="/dashboard" replace />
+  }
+  return <Outlet />
+}
+
+// Admin Only Layout Guard
+export function AdminGuard() {
+  const { user } = useAuth()
+  if (user?.role !== ROLES.ADMIN) {
     return <Navigate to="/dashboard" replace />
   }
   return <Outlet />

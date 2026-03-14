@@ -102,6 +102,11 @@ const submitNote = async (req, res) => {
     note.submittedAt = new Date();
     
     const updatedNote = await note.save();
+    
+    if (updatedNote.status !== 'submitted') {
+      throw new Error('Gagal memperbarui status catatan ke "submitted"');
+    }
+
     res.json(updatedNote);
   } catch (error) {
     res.status(500).json({ message: error.message });

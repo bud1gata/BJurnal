@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, BookOpen, Archive, User, Menu, X, LogOut, Settings, ClipboardList } from 'lucide-react'
+import { LayoutDashboard, BookOpen, Archive, User, Menu, X, LogOut, Settings, ClipboardList, CheckSquare } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getInitials, getAvatarColor } from '../utils/helpers'
 import { ROLES } from '../utils/constants'
@@ -14,13 +14,23 @@ const studentLinks = [
 const teacherLinks = [
   { to: '/teacher/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/teacher/sessions', icon: ClipboardList, label: 'Kelola Sesi' },
+  { to: '/teacher/approvals', icon: CheckSquare, label: 'Persetujuan' },
+  { to: '/profile', icon: User, label: 'Profil' },
+]
+
+const adminLinks = [
+  { to: '/admin/accounts', icon: User, label: 'Manajemen Akun' },
+  { to: '/teacher/approvals', icon: CheckSquare, label: 'Persetujuan Kelas' },
   { to: '/profile', icon: User, label: 'Profil' },
 ]
 
 export function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  const links = user?.role === ROLES.TEACHER ? teacherLinks : studentLinks
+  
+  let links = studentLinks
+  if (user?.role === ROLES.TEACHER) links = teacherLinks
+  if (user?.role === ROLES.ADMIN) links = adminLinks
 
   const handleLogout = () => {
     logout()
@@ -81,6 +91,12 @@ export function BottomTabBar() {
     ? [
         { to: '/teacher/dashboard', icon: LayoutDashboard, label: 'Home' },
         { to: '/teacher/sessions', icon: ClipboardList, label: 'Sesi' },
+        { to: '/profile', icon: User, label: 'Profil' },
+      ]
+    : user?.role === ROLES.ADMIN
+    ? [
+        { to: '/admin/accounts', icon: User, label: 'Akun' },
+        { to: '/teacher/approvals', icon: CheckSquare, label: 'Persetujuan' },
         { to: '/profile', icon: User, label: 'Profil' },
       ]
     : [

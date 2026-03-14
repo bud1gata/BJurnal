@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.10:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -134,6 +134,38 @@ export const noteApi = {
       (n.content && n.content.toLowerCase().includes(q)) ||
       (n.reflection && n.reflection.toLowerCase().includes(q))
     ));
+  }
+};
+
+// ====== Admin API ======
+export const adminApi = {
+  async getPendingRequests() {
+    const response = await api.get('/admin/pending-requests');
+    return response.data;
+  },
+  async approveRequest(id) {
+    const response = await api.put(`/admin/approve-request/${id}`);
+    return response.data;
+  },
+  async rejectRequest(id) {
+    const response = await api.put(`/admin/reject-request/${id}`);
+    return response.data;
+  },
+  async approveAll() {
+    const response = await api.put('/admin/approve-all');
+    return response.data;
+  },
+  async getPendingAccounts() {
+    const response = await api.get('/admin/pending-accounts');
+    return response.data;
+  },
+  async approveAccount(id) {
+    const response = await api.put(`/admin/approve-account/${id}`);
+    return response.data;
+  },
+  async rejectAccount(id) {
+    const response = await api.delete(`/admin/reject-account/${id}`);
+    return response.data;
   }
 };
 

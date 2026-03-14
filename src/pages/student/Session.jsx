@@ -143,16 +143,13 @@ export default function Session() {
     try {
       // Save latest content first
       const content = editor?.getHTML() || ''
-      await noteApi.updateNote(note.id, { content, reflection })
-      await noteApi.submitNote(note.id)
+      // It's safer to send the final version to the submit endpoint too
+      await noteApi.submitNote(note.id, { content, reflection })
+      
       setNote(prev => ({ ...prev, status: 'submitted' }))
       setShowSubmitModal(false)
-
-      if (auto) {
-        toast('⏰ Waktu habis! Catatan otomatis dikirim.', { icon: '🔒' })
-      } else {
-        toast.success('Catatan berhasil dikirim! 🎉')
-      }
+      
+      toast.success('Catatan berhasil dikirim! 🎉')
 
       setTimeout(() => navigate('/archive'), 1500)
     } catch (err) {
