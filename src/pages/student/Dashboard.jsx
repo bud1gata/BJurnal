@@ -59,7 +59,7 @@ export default function Dashboard() {
     <div className="animate-fade-in">
       {/* Header */}
       <div className="page-header">
-        <h1 className="page-greeting">{getGreeting()}, {user.nama?.split(' ')[0]}! 👋</h1>
+        <h1 className="page-greeting">{getGreeting()}, {user?.nama}! 👋</h1>
         <p className="page-subtitle">Kelas {user.kelas} • Siap belajar hari ini?</p>
       </div>
 

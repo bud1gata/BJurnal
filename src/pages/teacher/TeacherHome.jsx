@@ -36,7 +36,7 @@ export default function TeacherHome() {
   return (
     <div className="animate-fade-in">
       <div className="page-header">
-        <h1 className="page-greeting">{getGreeting()}, {user.nama?.split(' ').pop()}! 👨‍🏫</h1>
+        <h1 className="page-greeting">{getGreeting()}, {user?.nama}! 👨‍🏫</h1>
         <p className="page-subtitle">Ringkasan aktivitas hari ini</p>
       </div>
 
