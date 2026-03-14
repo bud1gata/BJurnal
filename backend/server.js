@@ -9,7 +9,10 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://jurnal.budiputra.web.id', 'https://jurnal.budiputra.web.id'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes

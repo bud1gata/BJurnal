@@ -22,10 +22,17 @@ export const AUTO_SAVE_INTERVAL = 60000 // 60 seconds
 export const MAX_IMAGE_SIZE = 2 * 1024 * 1024 // 2MB
 
 export const DURATIONS = [
-  { value: 30, label: '30 Menit' },
-  { value: 45, label: '45 Menit' },
-  { value: 60, label: '60 Menit' },
-  { value: 90, label: '90 Menit' },
+  { value: 45, label: '1 JP' },
+  { value: 90, label: '2 JP' },
+  { value: 135, label: '3 JP' },
+  { value: 180, label: '4 JP' },
+  { value: 225, label: '5 JP' },
+  { value: 270, label: '6 JP' },
+  { value: 315, label: '7 JP' },
+  { value: 360, label: '8 JP' },
+  { value: 420, label: '9 JP' },
+  { value: 480, label: '10 JP' },
+  { value: 540, label: '11 JP' },
 ]
 
 export const KELAS_OPTIONS = [
